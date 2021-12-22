@@ -7,11 +7,15 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".MainActivity">
+
     <Button
+        android:id="@+id/buttonStartLocationUpdates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="start_location_update"></Button>
+
     <Button
+        android:id="@+id/buttonStopLocationUpdates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="stop_location_stop"></Button>

@@ -1,10 +1,5 @@
 package com.example.autolocation;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -13,6 +8,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.LocationServices;
 
@@ -25,15 +25,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.buttonStartLocationUpdates).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
-                }
-                else {
-                    startLocationService();
-                }
+        findViewById(R.id.buttonStartLocationUpdates).setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
+            }
+            else {
+                startLocationService();
             }
         });
         findViewById(R.id.buttonStopLocationUpdates).setOnClickListener(new View.OnClickListener() {
@@ -62,16 +59,16 @@ public class MainActivity extends AppCompatActivity {
             for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)){
                 if (LocationServices.class.getName().equals(service.service.getClassName())){
                     if (service.foreground){
-                        return true;
+                        return false;
                     }
                 }
             }
-            return false;
+            return true;
         }
-        return false;
+        return true;
     }
     private void startLocationService(){
-        if (!isLocationServiceRunning()){
+        if (isLocationServiceRunning()){
             Intent intent= new Intent(getApplicationContext(),LocationServices.class);
             intent.setAction((Constants.ACTION_START_LOCATION_SERVICE));
             startService(intent);
@@ -80,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void stopLocationService(){
-        if (!isLocationServiceRunning()){
+        if (isLocationServiceRunning()){
             Intent intent= new Intent(getApplicationContext(),LocationServices.class);
             intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
             startService(intent);

@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
     private void startLocationService(){
-        if (isLocationServiceRunning()){
+        if (!isLocationServiceRunning()){
             Intent intent= new Intent(getApplicationContext(),LocationServices.class);
             intent.setAction((Constants.ACTION_START_LOCATION_SERVICE));
             startService(intent);
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void stopLocationService(){
-        if (isLocationServiceRunning()){
+        if (!isLocationServiceRunning()){
             Intent intent= new Intent(getApplicationContext(),LocationServices.class);
             intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
             startService(intent);
